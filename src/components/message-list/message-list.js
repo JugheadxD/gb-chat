@@ -1,21 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Input, InputAdornment } from "@mui/material";
 
 import { Send } from "@mui/icons-material";
 import { Message } from "./message";
 import { useStyles } from "./use-styles";
+import { useParams } from "react-router-dom";
 
 export const MessageList = () => {
   const ref = useRef();
+  const { roomId } = useParams();
 
   const [value, setValue] = useState("");
-  const [messages, setMessages] = useState([
-    {
-      author: "Бот",
-      message: "Привет от Бота",
-      date: new Date().toLocaleTimeString(),
-    },
-  ]);
+  const [messageList, setMessageList] = useState({
+    room1: [
+      {
+        author: "Бот",
+        message: "Привет от Бота",
+        date: "date",
+      },
+    ],
+  });
 
   const styles = useStyles();
 
@@ -27,14 +31,17 @@ export const MessageList = () => {
 
   const sendMessage = () => {
     if (value) {
-      setMessages([
-        ...messages,
-        {
-          author: "Пользователь",
-          message: value,
-          date: new Date().toLocaleTimeString(),
-        },
-      ]);
+      setMessageList({
+        ...messageList,
+        [roomId]: [
+          ...(messageList[roomId] ?? []),
+          {
+            author: "Пользователь",
+            message: value,
+            date: "date",
+          },
+        ],
+      });
       setValue("");
     }
   };
@@ -46,31 +53,37 @@ export const MessageList = () => {
   };
 
   useEffect(() => {
-    const lastMessages = messages[messages.length - 1];
+    const messages = messageList[roomId] ?? [];
+    const lastMessage = messages[messages.length - 1];
     let timerId = null;
 
-    if (messages.length && lastMessages.author === "Пользователь") {
+    if (messages.length && lastMessage.author === "Пользователь") {
       timerId = setTimeout(() => {
-        setMessages([
-          ...messages,
-          {
-            author: "Бот",
-            message: "Привет от Бота",
-            date: new Date().toLocaleTimeString(),
-          },
-        ]);
-      }, 500);
+        setMessageList({
+          ...messageList,
+          [roomId]: [
+            ...(messageList[roomId] ?? []),
+            {
+              author: "Бот",
+              message: "Привет от Бота",
+              date: "date",
+            },
+          ],
+        });
+      }, 1000);
     }
 
     return () => {
       clearInterval(timerId);
     };
-  }, [messages]);
+  }, [messageList, roomId]);
+
+  const message = messageList[roomId] ?? [];
 
   return (
     <>
       <div ref={ref}>
-        {messages.map((message) => (
+        {message.map((message) => (
           <Message message={message} key={message.date} />
         ))}
       </div>

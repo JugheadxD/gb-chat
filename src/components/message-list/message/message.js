@@ -1,4 +1,3 @@
-import React from "react";
 import cls from "classnames";
 import styles from "./message.module.css";
 
