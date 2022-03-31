@@ -6,11 +6,13 @@ import "./global.css";
 
 const App = () => {
   return (
-    <Layout
-      messages={<MessageList />}
-      chats={<ChatList />}
-      header={<Header />}
-    />
+    <>
+      <Layout
+        messages={<MessageList />}
+        chats={<ChatList />}
+        header={<Header />}
+      />
+    </>
   );
 };
 

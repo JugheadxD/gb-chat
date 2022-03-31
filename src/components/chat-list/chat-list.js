@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-
 import { List } from "@mui/material";
-// import styles from "./chat-list.module.css";
+
 import { Chat } from "./chat";
 
 export function ChatList() {

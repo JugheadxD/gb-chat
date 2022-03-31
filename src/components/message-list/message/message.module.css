@@ -1,12 +1,12 @@
 .message {
   border-radius: 10px;
   background-color: #182533;
-  color: rgb(255, 240, 240);
+  color: #fff;
   padding: 10px;
-  width: 40%;
-  margin: 0 auto 10px 0;
+  width: 45%;
+  margin: auto 0 10px 0;
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.5;
   word-break: break-all;
 }
 

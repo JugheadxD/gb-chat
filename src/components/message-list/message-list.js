@@ -1,29 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Input, InputAdornment } from "@mui/material";
+
 import { Send } from "@mui/icons-material";
 import { Message } from "./message";
 import { useStyles } from "./use-styles";
 
-export function MessageList() {
+export const MessageList = () => {
+  const ref = useRef();
+
   const [value, setValue] = useState("");
-  const [message, setMessage] = useState([
+  const [messages, setMessages] = useState([
     {
-      id: 1,
       author: "Бот",
-      text: "Привет от Бота",
+      message: "Привет от Бота",
       date: new Date().toLocaleTimeString(),
     },
   ]);
 
   const styles = useStyles();
 
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollTo(0, ref.current.scrollHeight);
+    }
+  });
+
   const sendMessage = () => {
     if (value) {
-      setMessage([
-        ...message,
+      setMessages([
+        ...messages,
         {
           author: "Пользователь",
-          text: value,
+          message: value,
           date: new Date().toLocaleTimeString(),
         },
       ]);
@@ -31,58 +39,55 @@ export function MessageList() {
     }
   };
 
-  const handlePressedInput = ({ code }) => {
+  const handlePressInput = ({ code }) => {
     if (code === "Enter") {
       sendMessage();
     }
   };
 
   useEffect(() => {
-    const lastMessage = message[message.length - 1];
+    const lastMessages = messages[messages.length - 1];
     let timerId = null;
 
-    if (message && lastMessage.author === "Пользователь") {
+    if (messages.length && lastMessages.author === "Пользователь") {
       timerId = setTimeout(() => {
-        setMessage([
-          ...message,
+        setMessages([
+          ...messages,
           {
             author: "Бот",
-            text: "Привет от Бота",
+            message: "Привет от Бота",
             date: new Date().toLocaleTimeString(),
           },
         ]);
-      }, 1500);
+      }, 500);
     }
 
     return () => {
       clearInterval(timerId);
     };
-  }, [message]);
+  }, [messages]);
 
   return (
-    <div>
-      <div>
-        {message.map((m) => (
-          <Message key={m.date} m={m} />
+    <>
+      <div ref={ref}>
+        {messages.map((message) => (
+          <Message message={message} key={message.date} />
         ))}
       </div>
-      <div>
-        <Input
-          fullWidth
-          placeholder="Введите текст..."
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          type="text"
-          autoFocus
-          onKeyPress={handlePressedInput}
-          className={styles.input}
-          endAdornment={
-            <InputAdornment position="end">
-              {value && <Send className={styles.icon} />}
-            </InputAdornment>
-          }
-        />
-      </div>
-    </div>
+
+      <Input
+        placeholder="Введите сообщение ..."
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyPress={handlePressInput}
+        className={styles.input}
+        fullWidth
+        endAdornment={
+          <InputAdornment position="end">
+            {value && <Send className={styles.icon} onClick={sendMessage} />}
+          </InputAdornment>
+        }
+      />
+    </>
   );
-}
+};

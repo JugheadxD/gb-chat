@@ -1,17 +1,18 @@
 import React from "react";
-// import styles from "./chat.module.css";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import { ListItem, ListItemButton, ListItemText } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 
-const useStyles = makeStyles(() => {
+import { ListItem, ListItemButton, ListItemText } from "@mui/material";
+import { AccountCircle } from "@mui/icons-material";
+import { makeStyles } from "@mui/styles";
+import st from "./chat.module.css";
+
+const useStyles = makeStyles((ctx) => {
   return {
     item: {
       "&.Mui-selected": {
-        backgroundColor: "#2b5280",
+        backgroundColor: "#2b5278",
       },
       "&.Mui-selected:hover": {
-        backgroundColor: "#2b5280",
+        backgroundColor: "#2b5278",
       },
     },
   };
@@ -19,6 +20,7 @@ const useStyles = makeStyles(() => {
 
 export function Chat({ title, selected, handleListItemClick }) {
   const styles = useStyles();
+
   return (
     <ListItemButton
       onClick={handleListItemClick}
@@ -26,9 +28,9 @@ export function Chat({ title, selected, handleListItemClick }) {
       selected={selected}
     >
       <ListItem>
-        <AccountBoxIcon fontSize="large" />
+        <AccountCircle fontSize="large" className={st.icon} />
       </ListItem>
-      <ListItemText primary={title} />
+      <ListItemText primary={title} className={st.text} />
     </ListItemButton>
   );
 }

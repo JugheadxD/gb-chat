@@ -1,5 +1,6 @@
 import { makeStyles } from "@mui/styles";
 
+// jss
 export const useStyles = makeStyles(() => {
   return {
     input: {
@@ -8,7 +9,7 @@ export const useStyles = makeStyles(() => {
       fontSize: "15px",
     },
     icon: {
-      color: "rgba(21, 70, 160, 0.76)",
+      color: "#2b5278",
       cursor: "pointer",
     },
   };
