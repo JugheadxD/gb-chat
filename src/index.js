@@ -1,24 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import { MessageList, Layout, ChatList, Header } from "./components";
 
-import './index.css';
+import "./global.css";
 
-const App = (props) => {
-  return props.title;
-};
-
-const Message = () => {
+const App = () => {
   return (
-    <div className='testDiv'>
-      <App title='test1' />
-    </div>
+    <>
+      <Layout
+        messages={<MessageList />}
+        chats={<ChatList />}
+        header={<Header />}
+      />
+    </>
   );
 };
 
-
 ReactDOM.render(
   <React.StrictMode>
-    <Message />
+    <App />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
