@@ -1,24 +1,34 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { MessageList, Layout, ChatList, Header } from "./components";
+import { ProfilePage, ChatPage } from "./pages";
 
-import './index.css';
+import "./global.css";
 
-const App = (props) => {
-  return props.title;
-};
-
-const Message = () => {
-  return (
-    <div className='testDiv'>
-      <App title='test1' />
-    </div>
-  );
-};
-
+// const App = () => {
+//   return (
+//     <>
+//       <Layout
+//         messages={<MessageList />}
+//         chats={<ChatList />}
+//         header={<Header />}
+//       />
+//     </>
+//   );
+// };
 
 ReactDOM.render(
   <React.StrictMode>
-    <Message />
+    <BrowserRouter>
+      <Header />
+      <Routes>
+        <Route path="/" element={<h1>Home Page</h1>} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/chat/*" element={<ChatPage />} />
+        <Route path="*" element={<h1>404 error</h1>} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
