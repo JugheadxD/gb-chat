@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Input, InputAdornment } from "@mui/material";
-
 import { Send } from "@mui/icons-material";
 import { Message } from "./message";
 import { useStyles } from "./use-styles";
@@ -16,7 +15,7 @@ export const MessageList = () => {
       {
         author: "Бот",
         message: "Привет от Бота",
-        date: "date",
+        date: new Date(),
       },
     ],
   });
@@ -29,26 +28,30 @@ export const MessageList = () => {
     }
   });
 
-  const sendMessage = () => {
-    if (value) {
-      setMessageList({
-        ...messageList,
-        [roomId]: [
-          ...(messageList[roomId] ?? []),
-          {
-            author: "Пользователь",
-            message: value,
-            date: "date",
-          },
-        ],
-      });
-      setValue("");
-    }
-  };
+  const sendMessage = useCallback(
+    (message, author = "Пользователь") => {
+      if (message) {
+        setMessageList({
+          ...messageList,
+          [roomId]: [
+            ...(messageList[roomId] ?? []),
+            {
+              message,
+              author,
+              date: new Date(),
+            },
+          ],
+        });
+        setValue("");
+      }
+    },
+    [messageList, roomId]
+  );
 
+  // Отправка сообщения по Enter
   const handlePressInput = ({ code }) => {
     if (code === "Enter") {
-      sendMessage();
+      sendMessage(value);
     }
   };
 
@@ -59,24 +62,14 @@ export const MessageList = () => {
 
     if (messages.length && lastMessage.author === "Пользователь") {
       timerId = setTimeout(() => {
-        setMessageList({
-          ...messageList,
-          [roomId]: [
-            ...(messageList[roomId] ?? []),
-            {
-              author: "Бот",
-              message: "Привет от Бота",
-              date: "date",
-            },
-          ],
-        });
+        sendMessage("Привет от Бота", "Бот");
       }, 1000);
     }
 
     return () => {
       clearInterval(timerId);
     };
-  }, [messageList, roomId]);
+  }, [messageList, roomId, sendMessage]);
 
   const message = messageList[roomId] ?? [];
 
@@ -95,9 +88,15 @@ export const MessageList = () => {
         onKeyPress={handlePressInput}
         className={styles.input}
         fullWidth
+        autoFocus
         endAdornment={
           <InputAdornment position="end">
-            {value && <Send className={styles.icon} onClick={sendMessage} />}
+            {value && (
+              <Send
+                className={styles.icon}
+                onClick={() => sendMessage(value)}
+              />
+            )}
           </InputAdornment>
         }
       />

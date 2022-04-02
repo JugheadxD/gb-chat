@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import {
@@ -11,15 +12,18 @@ import {
   AppBar,
 } from "@mui/material";
 
+import { ThemeContext } from "../../theme-context";
 import styles from "./header.module.css";
 
 const menu = [
-  { title: "Home Page", to: "/" },
-  { title: "Chat Page", to: "/chat" },
-  { title: "Profile Page", to: "/profile" },
+  { title: "Home", to: "/" },
+  { title: "Chat", to: "/chat" },
+  { title: "Profile", to: "/profile" },
 ];
 
 export function Header() {
+  const { themeSetter, theme } = useContext(ThemeContext);
+
   return (
     <AppBar position="static" className={styles.appBar}>
       <Container maxWidth="xl">
@@ -34,10 +38,7 @@ export function Header() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
             {menu.map((item) => (
-              <Button
-                key={item.to}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
+              <Button key={item.to} sx={{ my: 2, display: "block" }}>
                 <Link to={item.to} className={styles.link}>
                   {item.title}
                 </Link>
@@ -46,6 +47,21 @@ export function Header() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
+            <button
+              onClick={() => {
+                themeSetter("light");
+              }}
+            >
+              light
+            </button>
+            <button
+              onClick={() => {
+                themeSetter("dark");
+              }}
+            >
+              dark
+            </button>
+            <span style={{ color: theme.theme.color }}>{theme.name}</span>
             <IconButton sx={{ p: 0 }}>
               <Avatar />
             </IconButton>

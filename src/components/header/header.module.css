@@ -1,15 +1,14 @@
 .link {
     color: white;
     text-decoration: none;
-    transition: all 0.5s;
+    transition: all 0.3s;
 }
 
 .link:hover {
-    color: rgb(243, 219, 219);
-    text-decoration: underline;
+    color: rgba(67, 70, 76, 0.84);
 }
 
 .appBar {
     border-bottom: 1px solid black;
-    background: #17212b !important;
+    background: #17212b;
 }
